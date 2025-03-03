@@ -7,6 +7,7 @@ import shutil
 import sys
 from importlib.resources import files
 from pathlib import Path
+from typing import Set
 
 import click
 import requests
@@ -22,27 +23,67 @@ from near_py_tool.run_command import (
 )
 
 
-def get_near_exports_from_file(file_path):
+def get_near_exports_from_file(file_path: str) -> Set[str]:
+    """
+    Extract function names decorated with NEAR export decorators from a Python file.
+    This includes direct near.export decorators and custom decorators that wrap near.export.
+    
+    Args:
+        file_path: Path to the Python file to analyze
+        
+    Returns:
+        Set of function names that are exported to the NEAR blockchain
+    """
     with open(file_path, "r") as file:
-        tree = ast.parse(file.read(), filename=file_path)
+        content = file.read()
+        tree = ast.parse(content, filename=file_path)
 
+    # Track custom decorators that eventually use near.export
+    custom_exporters = set(["export", "view", "call", "init", "callback"])
+    # Track functions that are exported
     near_exports = set()
+    
+    # First pass: identify custom decorators that use near.export
     for node in ast.walk(tree):
         if isinstance(node, ast.FunctionDef):
-            for d in node.decorator_list:
-                if (
-                    isinstance(d, ast.Attribute)
-                    and isinstance(d.value, ast.Name)
-                    and d.attr == "export"
-                    and d.value.id == "near"
-                ):
-                    near_exports.add(node.name)
-        if isinstance(node, ast.FunctionDef) and any(
-            isinstance(d, ast.Name) and d.id == "near.export" for d in node.decorator_list
-        ):
-            near_exports.add(node.name)
+            # Check if this is a potential custom decorator function
+            if node.name in custom_exporters:
+                for body_node in ast.walk(node):
+                    # Check function bodies for return statements that use near.export
+                    if isinstance(body_node, ast.Return) and body_node.value is not None:
+                        # Look for near.export in the return expression
+                        for return_node in ast.walk(body_node.value):
+                            if (isinstance(return_node, ast.Attribute) and 
+                                isinstance(return_node.value, ast.Name) and 
+                                return_node.value.id == "near" and 
+                                return_node.attr == "export"):
+                                custom_exporters.add(node.name)
+                                break
+    
+    # Second pass: find functions with near.export or custom exporters as decorators
+    for node in ast.walk(tree):
+        if isinstance(node, ast.FunctionDef):
+            for decorator in node.decorator_list:
+                print(decorator.__dict__)
+                #print(decorator.id)
 
+                # Case 1: Direct @near.export
+                if ((isinstance(decorator, ast.Attribute) and 
+                     isinstance(decorator.value, ast.Name) and 
+                     decorator.value.id == "near" and 
+                     decorator.attr == "export") or
+                    (isinstance(decorator, ast.Name) and 
+                     decorator.id == "near.export")):
+                    near_exports.add(node.name)
+                    break
+
+                # Case 2: Using a custom exporter decorator like @init, @view, etc.
+                if isinstance(decorator, ast.Name) and decorator.id in custom_exporters:
+                    near_exports.add(node.name)
+                    break
+    
     return near_exports
+
 
 
 def get_imports_from_file(file_path):
