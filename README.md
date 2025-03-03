@@ -15,7 +15,7 @@ Dependencies
 `near-py-tool` expects the following dependencies installed:
 - Python>=3.9
 - essential build tools like `make` and C compiler
-- [Emscripten](https://emscripten.org/docs/getting_started/downloads.html) for compiling Python into WASM via MicroPython (can be installed automatically by `near-py-tool`, if desired)
+- [Emscripten](https://emscripten.org/docs/getting_started/downloads.html) for compiling Python into WASM via MicroPython (can be installed automatically by `near-py-tool`, if desired). Version 4.0.0 or above is recommended as there are issues with building some contracts on 3.x
 - [near-cli-rs](https://github.com/near/near-cli-rs) for NEAR Protocol interactions
 
 
