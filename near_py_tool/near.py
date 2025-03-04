@@ -67,6 +67,17 @@ def test_add_extra_balance():
     return api.local_keychain_account_ids()[0]
 
 
+def test_create_account():
+    """
+    Creates a new dev account
+    """
+    api.create_account(
+        f"{randomname.get_name()}.testnet",
+        ["autogenerate-new-keypair", "save-to-legacy-keychain", "network-config", "testnet", "create"],
+    )
+    return api.local_keychain_account_ids()[0]
+
+
 def test_account_id():
     """
     Returns account id the test is running under
