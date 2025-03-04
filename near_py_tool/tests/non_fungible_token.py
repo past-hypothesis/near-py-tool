@@ -734,7 +734,7 @@ def test_approve_revoke_all():
         __file__,
         "nft_approve",
         json.dumps({"token_id": "0", "account_id": approved_account_id, "msg": None}),
-        attached_deposit="500000000000000000000 yNEAR",
+        attached_deposit="900000000000000000000 yNEAR",
         skip_deploy=True,
     )
     assert result == b""
