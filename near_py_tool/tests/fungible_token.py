@@ -17,6 +17,7 @@ GAS_FOR_FT_TRANSFER_CALL = from_tgas(30)
 
 STATE_STORAGE_KEY = "STATE"
 
+
 def storage_byte_cost():
     return 10000000000000000000
 
@@ -78,20 +79,18 @@ def remove_account(account_id):
 
 def emit_event(event, data):
     near.log_utf8("EVENT_JSON:" + json.dumps({"standard": "nep141", "version": "1.0.0", "event": event, "data": data}))
-    
 
 
-# todo: check if contract has been initialized (except when this is the init call)
 def near_wrap(fn):
     def wrapped_fn():
         state_str = read_str(STATE_STORAGE_KEY)
         state = json.loads(state_str) if state_str is not None else {}
-        near.log_utf8(f"near_wrap({fn.__name__}): token state before function call: {state}")
+        near.log_utf8(f"near_wrap({fn.__name__}): state before function call: {state}")
         args = json.loads(near.input().decode("utf-8"))
         near.log_utf8(f"near_wrap({fn.__name__}): args {args}")
         args["state"] = state
         return_value = fn(**args)
-        near.log_utf8(f"near_wrap({fn.__name__}): token state after function call {state}")
+        near.log_utf8(f"near_wrap({fn.__name__}): state after function call {state}")
         write_str(STATE_STORAGE_KEY, json.dumps(state))
         if return_value is not None:
             near.log_utf8(f"near_wrap({fn.__name__}): returning value {return_value}")
@@ -431,6 +430,7 @@ def test_new():
             "decimals": 24,
         }
     )
+    near.test_create_account()
     contract_owner_account_id = near.test_account_id()
     result, gas_burnt = near.test_method(
         __file__,

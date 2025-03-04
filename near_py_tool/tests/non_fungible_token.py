@@ -368,7 +368,7 @@ def nft_resolve_transfer(state, previous_owner_id, receiver_id, token_id, approv
     # If using Approval Management extension,
     # 1. revert any approvals receiver already set, refunding storage costs
     # 2. reset approvals to what previous owner had set before call to nft_transfer_call
-    approved_account_ids = state["approvals_by_id"].ge(token_id, {}) if "approvals_by_id" in state else None
+    approved_account_ids = state["approvals_by_id"].get(token_id, {}) if "approvals_by_id" in state else None
     if approved_account_ids:
         refund_approved_account_ids(receiver_id, approved_account_ids)
         state["approvals_by_id"][token_id] = {}
@@ -650,6 +650,7 @@ def test_new():
             "reference_hash": None,
         }
     )
+    near.test_create_account()
     contract_owner_account_id = near.test_account_id()
     result, gas_burnt = near.test_method(
         __file__,
