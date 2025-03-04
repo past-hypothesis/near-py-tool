@@ -38,7 +38,7 @@ Unneeded modules from the MicroPython stdlib can be excluded from the build by a
     exclude-micropython-stdlib-packages = [...]
 
 
-NEAR ABI support
+NEAR WASM ABI support
 ----------------
 
 Everything from https://github.com/near/near-sdk-rs/blob/master/near-sys/src/lib.rs should be available via `near` module, for example:
@@ -78,9 +78,10 @@ While there is still plenty of work ahead of us, there are already some small ye
 - The smart contract that guards 3000 NEAR and gives away 2 NEAR per user and prevents double-spend: https://github.com/frol/1t-agents-fundme-agent
 - The smart contract that guards 50 NEAR until it is jailbreaked: https://github.com/frol/neardevnewsletter-issue50-quest/tree/main/contract
 - Demo Web4 contract in Python: https://github.com/frol/near-web4-demo-py
+- Experimental ports of fungible/non-fungible token contracts as a part of the test suite: https://github.com/past-hypothesis/near-py-tool/blob/main/near_py_tool/tests/fungible_token.py https://github.com/past-hypothesis/near-py-tool/blob/main/near_py_tool/tests/non_fungible_token.py
 
 TODO
 ----
 
 - NEAR ABI metadata generation
-- porting of a few popular/useful contracts from Rust to Python
+- reproducible builds
