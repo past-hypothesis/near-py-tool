@@ -4,7 +4,7 @@ version = "0.1.28"
 description = "Python NEAR contract build/deploy tool"
 readme = "README.md"
 requires-python = ">=3.9"
-dependencies = ["toml", "packaging", "randomname", "click", "rich_click", "questionary", "requests", "pytest"]
+dependencies = ["toml", "packaging", "randomname", "click", "rich_click", "questionary", "requests", "pytest", "msgpack"]
 
 [project.scripts]
 near-py-tool = "near_py_tool.cli:cli"
