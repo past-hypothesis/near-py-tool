@@ -67,13 +67,13 @@ Please be aware that there is no full compatibility to CPython yet since we use 
 MessagePack serialization
 -------------------------
 
-`near-py-tool` provides an built-in `msgpack` module, which provides fast and space-efficient MessagePack serialization of arbitrary Python data, including aritrary-precision integers (implemented in C via [cmp](https://github.com/camgunz/cmp) library)
+`near-py-tool` provides an built-in `msgpack` module, which provides fast and space-efficient MessagePack serialization of arbitrary Python data, including arbitrary-precision integers (implemented in C via [cmp](https://github.com/camgunz/cmp) library)
 
 Basic interface is equivalent to the Python `msgpack` module:
 
 ```python
-def packb(o: object) -> bytes
-def unpackb(b: bytes) -> object
+def packb(o: Any) -> bytes
+def unpackb(b: bytes) -> Any
 ```
 
 Arbitrary-precision integers are stored as a MessagePack extension type 81; this is not portable outside of the WASM contract runtime environment, but useful for saving large number like account balances within the contract persisten state
