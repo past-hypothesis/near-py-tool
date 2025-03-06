@@ -517,7 +517,7 @@ def call_method(
         args = input
     else:
         args_type = "base64-args"
-        args = base64.b64encode(input)
+        args = base64.b64encode(input).decode("ascii")
     cmdline = [
         "near",
         "contract",
