@@ -65,7 +65,6 @@ def key_error_nested():
     near.value_return(result)
 
 
-# note: this fails with NEAR_ABORT() called by nlr_jump_fail() (main.c:289)
 @near.export
 def key_error_combined():
     m = {"another_key": "value"}
@@ -77,7 +76,6 @@ def key_error_combined():
     near.value_return(result)
 
 
-# note: this fails with NEAR_ABORT() called by nlr_jump_fail() (main.c:289)
 @near.export
 def key_error_combined_reverse():
     m = {"another_key": "value"}
@@ -109,13 +107,11 @@ def test_key_error_nested():
     assert result == b"default"
 
 
-# # note: this fails with NEAR_ABORT() called by nlr_jump_fail() (main.c:289)
-# def test_key_error_combined():
-#     result, gas_burnt = near.test_method(__file__, "key_error_combined", {})
-#     assert result == b"default"
+def test_key_error_combined():
+    result, gas_burnt = near.test_method(__file__, "key_error_combined", {})
+    assert result == b"default"
 
-# # note: this fails with NEAR_ABORT() called by nlr_jump_fail() (main.c:289)
-# def test_key_error_combined_reverse():
-#     result, gas_burnt = near.test_method(__file__, "key_error_combined_reverse", {})
-#     assert result == b"default"
 
+def test_key_error_combined_reverse():
+    result, gas_burnt = near.test_method(__file__, "key_error_combined_reverse", {})
+    assert result == b"default"
