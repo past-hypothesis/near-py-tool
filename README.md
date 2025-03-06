@@ -76,7 +76,7 @@ def packb(o: Any) -> bytes
 def unpackb(b: bytes) -> Any
 ```
 
-Arbitrary-precision integers are stored as a MessagePack extension type 81; this is not portable outside of the WASM contract runtime environment, but useful for saving large number like account balances within the contract persisten state
+Arbitrary-precision integers are stored as MessagePack extension type 81; this is not portable outside of the WASM contract runtime environment, but useful for saving large numbers like account balances within the contract persistent state
 
 
 NEAR WASM ABI support
