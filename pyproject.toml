@@ -1,6 +1,6 @@
 [project]
 name = "near-py-tool"
-version = "0.1.27"
+version = "0.1.28"
 description = "Python NEAR contract build/deploy tool"
 readme = "README.md"
 requires-python = ">=3.9"
